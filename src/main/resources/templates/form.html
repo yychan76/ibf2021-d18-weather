@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Weather Lookup</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Weather Lookup</h1>
+                <form action="/weather" method="get">
+                    <div class="mb-2 input-group">
+                        <input type="text" class="form-control" name="city" placeholder="Please enter a city">
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" class="btn btn-primary btn-lg" value="Get Weather">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="details" th:if="${weatherList} != null">
+
+                    <div th:each="weather : ${weatherList}">
+                        <h2 class="display-4">Weather Details for <span th:text="${weather.cityName}"></span></h2>
+                        <table class="table">
+                            <tr>
+                                <td rowspan="2">
+                                    <img class="img-thumbnail" th:src="${'http://openweathermap.org/img/wn/' + weather.icon + '@2x.png'}" th:alt="${weather.main}">
+                                </td>
+                                <td class="lead">Description</td>
+                                <td class="lead"><b><span th:text="${weather.main}"></span></b> <i><span th:text="${weather.description}"></span></i></td>
+                            </tr>
+                            <tr>
+                                <td class="lead">Temperature</td>
+                                <td class="lead"><span th:text="${weather.temperature + ' &#176;C'}"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
