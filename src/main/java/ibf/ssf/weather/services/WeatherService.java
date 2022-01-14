@@ -35,8 +35,8 @@ public class WeatherService {
 
 
     public List<Weather> getWeather(String city) {
-
-        city = String.join("+", city.split("\\s"));
+        // support multiple spaces between words
+        city = String.join("+", city.split("\\s+"));
 
         String url = UriComponentsBuilder
             .fromUriString(URL_WEATHER)
