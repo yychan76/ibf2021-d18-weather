@@ -38,6 +38,7 @@ public class WeatherController {
         List<Weather> weatherList;
         try {
             weatherList = weatherService.getWeather(city);
+            // retrieve the first weather obj to find out the country details
             Weather weather = weatherList.iterator().next();
             String countryCode = weather.getCountryCode();
             Locale locale = new Locale("", countryCode);
@@ -48,6 +49,7 @@ public class WeatherController {
             long minutesAgo = ChronoUnit.MINUTES.between(dateToLocalTime(resultDate), LocalTime.now());
             logger.info("minutesAgo: %s".formatted(minutesAgo));
             model.addAttribute("weatherList", weatherList);
+            model.addAttribute("cityName", weather.getCityName());
             model.addAttribute("countryName", locale.getDisplayCountry());
             model.addAttribute("countryFlag", localeToEmoji(locale));
             model.addAttribute("resultDate", resultDate);
