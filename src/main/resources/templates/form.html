@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Weather Lookup</h1>
+                <h1 class="display-4">Weather Lookup</h1>
                 <form action="/weather" method="get">
                     <div class="mb-2 input-group">
                         <input type="text" class="form-control" name="city" placeholder="Please enter a city">
@@ -25,21 +25,39 @@
 
         <div class="row">
             <div class="col">
+                <div th:if="${error} != null">
+                    <h4 class="display-4">City Not Found</h4>
+                    <em><p th:text="${error}"></p></em>
+                </div>
+
                 <div class="details" th:if="${weatherList} != null">
 
                     <div th:each="weather : ${weatherList}">
-                        <h2 class="display-4">Weather Details for <span th:text="${weather.cityName}"></span></h2>
-                        <table class="table">
+                        <h2 class="display-4"><span class="text-muted">Weather Details for</span> <span th:text="${weather.cityName}"></span></h2>
+                        <table class="table table-borderless">
                             <tr>
-                                <td rowspan="2">
-                                    <img class="img-thumbnail" th:src="${'http://openweathermap.org/img/wn/' + weather.icon + '@2x.png'}" th:alt="${weather.main}">
+                                <td rowspan="6">
+                                    <img class="img-thumbnail img-fluid rounded-circle w-auto" th:src="${'http://openweathermap.org/img/wn/' + weather.icon + '@4x.png'}" th:alt="${weather.main}">
                                 </td>
                                 <td class="lead">Description</td>
-                                <td class="lead"><b><span th:text="${weather.main}"></span></b> <i><span th:text="${weather.description}"></span></i></td>
+                                <td class="lead"><strong><span th:text="${weather.main}"></span><strong>, <em><span th:text="${weather.description}"></span></em></td>
                             </tr>
                             <tr>
-                                <td class="lead">Temperature</td>
-                                <td class="lead"><span th:text="${weather.temperature + ' &#176;C'}"></span></td>
+                                <td class="lead" rowspan="2">Temperature</td>
+                                <td class="lead"><span th:text="${weather.temperature + ' &#176;C'}"></span> &nbsp;<em>Feels like</em> <em><strong><span class="h3" th:text="${weather.feelsTemperature + ' &#176;C'}"></span></strong></em></td>
+                            </tr>
+                            <tr>
+                                <td class="lead"><small><span th:text="${weather.minTemperature + ' &#176;C (Low)'}"></span>  &nbsp; <span th:text="${weather.maxTemperature + ' &#176;C (High)'}"></span></small></td>
+                            </tr>
+                            <tr>
+                                <td class="lead">Humidity</td>
+                                <td class="lead"><span th:text="${weather.humidity + ' %'}"></span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Current weather data is powered by the <a href="https://openweathermap.org/api">Weather API from OpenWeather</a></td>
+                            </tr>
+                            <tr th:if="${weather.cached}">
+                                <td colspan="2">Results are cached <span th:text="${minutesAgo + ' minutes ago'}"></span> at <span th:text="${resultDate}"></span> </td>
                             </tr>
                         </table>
                     </div>
