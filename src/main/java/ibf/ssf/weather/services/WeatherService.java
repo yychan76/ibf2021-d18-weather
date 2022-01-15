@@ -46,7 +46,7 @@ public class WeatherService {
 
     public List<Weather> getWeather(String city) {
         // support multiple spaces between words
-        city = String.join("+", city.split("\\s+"));
+        city = getQueryString(city);
 
         // if the results were previously cached and still not expired return it
         Optional<List<Weather>> weatherListOpt = weatherCacheService.get(city);
@@ -121,5 +121,12 @@ public class WeatherService {
         return Collections.emptyList();
     }
 
+    private String getQueryString(String city) {
+        // query string allows for <city>, <country code>
+        // cleanup spaces between comma
+        String cleanedComma = String.join(",", city.split("\\s*,\\s*"));
+        // replace multiple spaces between with single + to send as get query string
+        return String.join("+", cleanedComma.trim().split("\\s+"));
+    }
 
 }
