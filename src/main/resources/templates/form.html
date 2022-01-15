@@ -33,7 +33,7 @@
                 <div class="details" th:if="${weatherList} != null">
 
                     <div th:each="weather : ${weatherList}">
-                        <h2 class="display-4"><span class="text-muted">Weather Details for</span> <span th:text="${weather.cityName}"></span></h2>
+                        <h2 class="display-4"><span class="text-muted">Weather Details for</span> <span th:text="${weather.cityName}"></span> (<span th:text="${countryName}"></span><span th:text="${countryFlag}"></span>)</h2>
                         <table class="table table-borderless">
                             <tr>
                                 <td rowspan="6">

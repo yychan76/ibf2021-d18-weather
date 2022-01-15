@@ -93,6 +93,7 @@ public class WeatherService {
             final float maxTemperature = (float) result.getJsonObject("main").getJsonNumber("temp_max").doubleValue();
             final int humidity = result.getJsonObject("main").getJsonNumber("humidity").intValue();
             final int timestamp = result.getInt("dt");
+            final String countryCode = result.getJsonObject("sys").getString("country");
 
             List<Weather> weatherList = readings.stream()
                 .map(JsonObject.class::cast)
@@ -106,6 +107,7 @@ public class WeatherService {
                     v.setMaxTemperature(maxTemperature);
                     v.setHumidity(humidity);
                     v.setTimestamp(timestamp);
+                    v.setCountryCode(countryCode);
                     return v;
                 })
                 .toList();

@@ -26,6 +26,7 @@ public class Weather {
     private String icon;
     private int timestamp;
     private boolean cached;
+    private String countryCode;
 
 
     public String getCityName() {
@@ -120,6 +121,14 @@ public class Weather {
         this.cached = cached;
     }
 
+    public String getCountryCode() {
+        return this.countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     public static Weather create(JsonObject jsonObj) {
         // this method is run from an array of API readings JsonObjects that only has these 3 fields
         // other fields need to be set manually at the call site
@@ -143,6 +152,7 @@ public class Weather {
                 weather.setMaxTemperature((float)jsonObj.getJsonNumber("temp_max").doubleValue());
                 weather.setHumidity(jsonObj.getInt("humidity"));
                 weather.setTimestamp(jsonObj.getInt("timestamp"));
+                weather.setCountryCode(jsonObj.getString("country"));
                 return Optional.of(weather);
         } catch (JsonProcessingException jpe) {
             logger.severe("Unable to parse JSON string: %s".formatted(jpe.getMessage()));
@@ -164,6 +174,7 @@ public class Weather {
             .add("temp_max", maxTemperature)
             .add("humidity", humidity)
             .add("timestamp", timestamp)
+            .add("country", countryCode)
             .build();
     }
 }
