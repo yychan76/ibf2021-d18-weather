@@ -47,14 +47,19 @@ public class WeatherService {
 
         RequestEntity<Void> request = RequestEntity.get(url).build();
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> response =template.exchange(request, String.class);
-        logger.info(response.toString());
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("Error: status code %s".formatted(response.getStatusCode()));
+        ResponseEntity<String> response;
+
+        try {
+            response = template.exchange(request, String.class);
+            logger.info(response.getStatusCode().toString());
+            logger.info(response.toString());
+        } catch (HttpClientErrorException e) {
+            logger.info(e.getResponseBodyAsString());
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new CityNotFoundException(e.getMessage(), e.getCause());
+            }
+            return Collections.emptyList();
         }
-        final String body = response.getBody();
-        try (InputStream inputStream = new ByteArrayInputStream(body.getBytes())) {
-            final JsonReader reader = Json.createReader(inputStream);
             final JsonObject result = reader.readObject();
             final JsonArray readings = result.getJsonArray("weather");
             final String cityName = result.getString("name");
