@@ -70,6 +70,22 @@ public class WeatherController {
         return "form";
     }
 
+    @GetMapping("{city}")
+    public ResponseEntity<String> getCity(@PathVariable String city) {
+        try {
+            List<Weather> weatherList = weatherService.getWeather(city);
+            JsonObject weatherJson = Json.createObjectBuilder()
+                .add("current_weather", Json.createArrayBuilder(weatherList.stream().map(Weather::toJson).toList()))
+                .add("timestamp", (new Date()).getTime()).build();
+            return ResponseEntity.ok(weatherJson.toString());
+        } catch (CityNotFoundException e) {
+            JsonObject errorJson = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+            return ResponseEntity.badRequest().body(errorJson.toString());
+        }
+    }
+
     private LocalTime dateToLocalTime(Date date) {
         return LocalTime.ofInstant(date.toInstant(), DEFAULT_TIME_ZONE);
     }
