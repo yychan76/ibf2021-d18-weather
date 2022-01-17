@@ -1,4 +1,5 @@
 package ibf.ssf.weather.controllers;
+import static ibf.ssf.weather.Constants.BEAN_CACHING_WEATHER_SERVICE;
 import static ibf.ssf.weather.Constants.DEFAULT_TIME_ZONE;
 
 import java.time.LocalTime;
@@ -9,16 +10,21 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ibf.ssf.weather.error.CityNotFoundException;
 import ibf.ssf.weather.models.Weather;
 import ibf.ssf.weather.services.WeatherService;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 @Controller
 @RequestMapping(
@@ -29,6 +35,7 @@ public class WeatherController {
     private final Logger logger = Logger.getLogger(WeatherController.class.getName());
 
     @Autowired
+    @Qualifier(BEAN_CACHING_WEATHER_SERVICE)
     private WeatherService weatherService;
 
     @GetMapping
