@@ -12,19 +12,15 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ibf.ssf.weather.error.CityNotFoundException;
 import ibf.ssf.weather.models.Weather;
 import ibf.ssf.weather.services.WeatherService;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 
 @Controller
 @RequestMapping(
@@ -70,24 +66,7 @@ public class WeatherController {
         return "form";
     }
 
-    @GetMapping("{city}")
-    public ResponseEntity<String> getCity(@PathVariable String city) {
-        try {
-            List<Weather> weatherList = weatherService.getWeather(city);
-            List<JsonObject> weatherJsonList = weatherList.stream()
-                                                    .map(Weather::toJson)
-                                                    .toList();
-            JsonObject weatherJson = Json.createObjectBuilder()
-                .add("current_weather", Json.createArrayBuilder(weatherJsonList))
-                .add("timestamp", (new Date()).getTime()).build();
-            return ResponseEntity.ok(weatherJson.toString());
-        } catch (CityNotFoundException e) {
-            JsonObject errorJson = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-            return ResponseEntity.badRequest().body(errorJson.toString());
-        }
-    }
+
 
     private LocalTime dateToLocalTime(Date date) {
         return LocalTime.ofInstant(date.toInstant(), DEFAULT_TIME_ZONE);

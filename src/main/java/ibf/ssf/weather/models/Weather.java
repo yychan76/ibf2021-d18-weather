@@ -8,10 +8,13 @@ import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
+@Component
 public class Weather {
     private static final Logger logger = Logger.getLogger(Weather.class.getName());
 
