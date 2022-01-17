@@ -74,8 +74,11 @@ public class WeatherController {
     public ResponseEntity<String> getCity(@PathVariable String city) {
         try {
             List<Weather> weatherList = weatherService.getWeather(city);
+            List<JsonObject> weatherJsonList = weatherList.stream()
+                                                    .map(Weather::toJson)
+                                                    .toList();
             JsonObject weatherJson = Json.createObjectBuilder()
-                .add("current_weather", Json.createArrayBuilder(weatherList.stream().map(Weather::toJson).toList()))
+                .add("current_weather", Json.createArrayBuilder(weatherJsonList))
                 .add("timestamp", (new Date()).getTime()).build();
             return ResponseEntity.ok(weatherJson.toString());
         } catch (CityNotFoundException e) {
